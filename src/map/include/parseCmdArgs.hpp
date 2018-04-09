@@ -188,7 +188,7 @@ sequences shorter than segment length will be ignored", ArgvParser::OptionRequir
 
       str << cmd.optionValue("ref");
       str >> ref;
-
+	//std::cout<<"### ref: "<<ref<<std::endl;
       parameters.refSequences.push_back(ref);
     }
     else //list of files

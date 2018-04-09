@@ -166,6 +166,7 @@ namespace skch
                 Q.front().first.wpos = currentWindowId;     
                 minimizerIndex.push_back(Q.front().first);
               }
+		//std::cout<<"##"<<minimizerIndex[0].wpos<<std::endl;
             }
           }
         }

@@ -125,7 +125,7 @@ namespace skch
 
         //Create the thread pool 
         ThreadPool<InputSeqContainer, MI_Type> threadPool( [this](InputSeqContainer* e) {return buildHelper(e);}, param.threads);
-
+	//std::cout<<"### param "<<param.refSequences.size()<<std::endl;
         for(const auto &fileName : param.refSequences)
         {
 
@@ -135,6 +135,7 @@ namespace skch
 
           //Open the file using kseq
           FILE *file = fopen(fileName.c_str(), "r");
+	//std::cout<<"##### The file using kseq "<<fileName.c_str()<<std::endl;
           gzFile fp = gzdopen(fileno(file), "r");
           kseq_t *seq = kseq_init(fp);
 
@@ -194,6 +195,7 @@ namespace skch
         MI_Type* thread_output = new MI_Type();
 
         //Compute minimizers in reference sequence
+	//std::cout<<"buildHelper: "<<&(input->seq[0u])<<" "<<input->len<<" "<<param.kmerSize<<" "<<param.windowSize<<" "<<param.alphabetSize<<" "<<input->seqCounter<<std::endl;
         skch::CommonFunc::addMinimizers(*thread_output, &(input->seq[0u]), input->len, param.kmerSize, param.windowSize, param.alphabetSize, input->seqCounter);
 
         return thread_output;
@@ -210,7 +212,7 @@ namespace skch
       }
 
       /**
-       * @brief   build the index for fast lookups using minimizer table
+       * @brief   build the index for fast lookup:s using minimizer table
        */
       void index()
       {
