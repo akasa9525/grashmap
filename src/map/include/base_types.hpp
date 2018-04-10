@@ -9,6 +9,9 @@
 
 #include <tuple>
 #include <vector>
+#include "../../sparsepp/spp.h"
+
+spp::sparse_hash_map<std::string, std::string>pathInfo;
 
 namespace skch
 {
@@ -39,7 +42,7 @@ namespace skch
       return std::tie(hash, seqId, wpos, strand) 
         == std::tie(x.hash, x.seqId, x.wpos, x.strand);
     }
-
+    
     bool operator !=(const MinimizerInfo& x) {
       return std::tie(hash, seqId, wpos, strand) 
         != std::tie(x.hash, x.seqId, x.wpos, x.strand);
@@ -68,7 +71,8 @@ namespace skch
         < std::tie(x.seqId, x.wpos, x.strand);
     }
   };
-
+	
+  
   typedef hash_t MinimizerMapKeyType;
   typedef std::vector<MinimizerMetaData> MinimizerMapValueType;
 

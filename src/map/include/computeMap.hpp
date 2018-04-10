@@ -127,13 +127,13 @@ namespace skch
 #ifdef DEBUG
           std::cout << "INFO, skch::Map::mapQuery, mapping reads in " << fileName << std::endl;
 #endif
-
+	std::cout<<"copute"<<std::endl;	
           //size of sequence
           offset_t len;
-
+	std::cout<<"return vale: "<<kseq_read(seq)<<std::endl;
           while ((len = kseq_read(seq)) >= 0) 
           {
-
+	std::cout<<"in computemap "<<seq->readType<<std::endl;
             if (param.filterMode == filter::ONETOONE)
               qmetadata.push_back( ContigInfo{seq->name.s, (offset_t) seq->seq.l} );
 

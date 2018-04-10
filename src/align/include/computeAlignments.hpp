@@ -86,7 +86,8 @@ namespace align
           skch::offset_t len;
 
           while ((len = kseq_read(seq)) >= 0) 
-          {
+          {	
+		std::cout<<seq->name.s;
              std::string seqId = seq->name.s;
 
              skch::CommonFunc::makeUpperCase(seq->seq.s, len);

@@ -135,7 +135,7 @@ typedef struct __kstring_t {
             str->s = (char*)calloc(1, 1);                                \
         }                                                                \
         str->s[str->l] = '\0';                                            \
-	std::cout<<"string: "<<str->s<<"l: "<<str->l<<"m: "<<str->m<<std::endl;	\
+	/*std::cout<<"string: "<<str->s<<"l: "<<str->l<<"m: "<<str->m<<std::endl;*/	\
         return str->l;                                                    \
     }
 
@@ -180,13 +180,14 @@ typedef struct __kstring_t {
             /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P')*/ while ((c = ks_getc(ks)) != -1 && c != 'S' && c!='P');   \
             if (c == -1) return -1; /* end of file */                    \
             seq->last_char = c;                                            \
-	std::cout<<(char)c<<std::endl;		\
+	/*std::cout<<(char)c<<std::endl;*/		\
         /*}*/ /* the first header char has been read */                        \
         seq->comment.l = seq->seq.l = seq->qual.l = 0;                    \
 	/*std::cout<<ks_getc(ks)<<std::endl;*/ ks_getc(ks);	\
         if (ks_getuntil(ks, '\t', &seq->name, &c) < 0) return -1;            \
 	/*std::cout<<"bet if "<<c<<std::endl;*/\
                     if(seq->last_char=='S'){\
+	seq->readType=true;	\
         /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != '+' && c != 'P')*/while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P') { \
             if (isgraph(c)) { /* printable non-space character */        \
 			\
@@ -200,10 +201,11 @@ typedef struct __kstring_t {
             }                                                            \
         }                                                                \
 	seq->seq.s[seq->seq.l]=0;	\
-	std::cout<<"Seq: "<<seq->seq.s<<" "<<std::endl;	\
+	/*std::cout<<"Seq: "<<seq->seq.s<<" "<<seq->seq.l<<std::endl;*/	\
 	return seq->seq.l;\
 	}	\
 	if(seq->last_char=='P'){\
+	seq->readType=false;\
         /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != '+' && c != 'P')*/while ((c = ks_getc(ks)) != -1 && (c != 'S' && c != 'P')) { \
             if (isgraph(c)) { /* printable non-space character */        \
 			\
@@ -217,7 +219,7 @@ typedef struct __kstring_t {
             }                                                            \
         }                                                                \
 	seq->path.s[seq->path.l]=0;	\
-	std::cout<<"Path: "<<seq->path.s<<" "<<std::endl;	\
+	/*std::cout<<"Path: "<<seq->path.s<<" "<<seq->path.l<<std::endl;*/	\
 	return seq->path.l;	\
 	}\
 				\
@@ -244,6 +246,7 @@ typedef struct __kstring_t {
 
 #define __KSEQ_TYPE(type_t)                        \
     typedef struct {                            \
+	bool readType; /*to identify path or Seq	*/\
         kstring_t name, comment, seq, qual,path;        \
         int last_char;                            \
         kstream_t *f;                            \
