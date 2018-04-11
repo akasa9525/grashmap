@@ -74,6 +74,7 @@
             if (ks->end < __bufsize) ks->is_eof = 1;        \
             if (ks->end == 0) return -1;                    \
         }                                                    \
+	std::cout<<(char)(int)ks->buf[ks->begin++]<<std::endl;	\
         return (int)ks->buf[ks->begin++];                    \
     }
 
@@ -121,8 +122,10 @@ typedef struct __kstring_t {
                 str->s = (char*)realloc(str->s, str->m);                \
             }                                                            \
             memcpy(str->s + str->l, ks->buf + ks->begin, i - ks->begin); \
+	\
             str->l = str->l + (i - ks->begin);                            \
             ks->begin = i + 1;                                            \
+\
             if (i < ks->end) {                                            \
                 if (dret) *dret = ks->buf[i];                            \
                 break;                                                    \
@@ -133,6 +136,7 @@ typedef struct __kstring_t {
             str->s = (char*)calloc(1, 1);                                \
         }                                                                \
         str->s[str->l] = '\0';                                            \
+	/*std::cout<<"string: "<<str->s<<"l: "<<str->l<<"m: "<<str->m<<std::endl;*/	\
         return str->l;                                                    \
     }
 
@@ -168,39 +172,71 @@ typedef struct __kstring_t {
    -2   truncated quality string
  */
 #define __KSEQ_READ                                                        \
+		\
     static int kseq_read(kseq_t *seq)                                    \
     {                                                                    \
         int c;                                                            \
         kstream_t *ks = seq->f;                                            \
-	std::cout<<"first char: "<<ks->buf[ks->begin]<<std::endl;\
         if (seq->last_char == 0) { /* then jump to the next header line */ \
-            while ((c = ks_getc(ks)) != -1 && c != 'S');    \
+            /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P')*/ while ((c = ks_getc(ks)) != -1 && c != 'S');   \
             if (c == -1) return -1; /* end of file */                    \
             seq->last_char = c;                                            \
-        } /* the first header char has been read */                        \
-	ks_getc(ks);\
+	/*std::cout<<(char)c<<std::endl;*/}		\
+	\
+        /*}*/ /* the first header char has been read */                        \
         seq->comment.l = seq->seq.l = seq->qual.l = 0;                    \
+	/*std::cout<<ks_getc(ks)<<std::endl;*/ ks_getc(ks);	\
+	std::cout<<"fisrt char: "<<(char)c<<std::endl;	\
         if (ks_getuntil(ks, '\t', &seq->name, &c) < 0) return -1;            \
-        /*if (c != '\n') ks_getuntil(ks, '\n', &seq->comment, 0);*/            \
-        while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P') { \
+	/*std::cout<<"bet if "<<c<<std::endl;*/\
+                    /*if(seq->last_char=='S'){*/\
+	/*std::cout<<"reading s"<<seq->name.s<<std::endl;*/		\
+	seq->readType=true;	\
+        /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != '+' && c != 'P')*/while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P') { \
             if (isgraph(c)) { /* printable non-space character */        \
+		if(c=='P') { while(c = ks_getc(ks) !=-1 && c !='\n');continue;	}\
                 if (seq->seq.l + 1 >= seq->seq.m) { /* double the memory */ \
                     seq->seq.m = seq->seq.l + 2;                        \
                     kroundup32(seq->seq.m); /* rounded to next closest 2^k */ \
                     seq->seq.s = (char*)realloc(seq->seq.s, seq->seq.m); \
                 }                                                        \
+			\
                 seq->seq.s[seq->seq.l++] = (char)c;                        \
             }                                                            \
         }                                                                \
-        if (c == 'S' || c == 'P') seq->last_char = c; /* the first header char has been read */    \
+	seq->seq.s[seq->seq.l]=0;	\
+	/*std::cout<<(char)c<<std::endl;*/	\
+	/*std::cout<<"Seq: "<<seq->seq.s<<" "<<seq->seq.l<<std::endl;*/	\
+	return seq->seq.l;\
+	/*}*/	\
+	/*if(seq->last_char=='P'){\
+	seq->readType=false;\
+        while ((c = ks_getc(ks)) != -1 && (c != 'S' && c != 'P')) { \
+            if (isgraph(c)) {        \
+			\
+                if (seq->path.l + 1 >= seq->path.m) { \
+                    seq->path.m = seq->path.l + 2;                        \
+                    kroundup32(seq->path.m); \
+                    seq->path.s = (char*)realloc(seq->path.s, seq->path.m); \
+                }                                                        \
+			\
+                seq->path.s[seq->path.l++] = (char)c;                        \
+            }                                                            \
+        }                                                                \
+	seq->path.s[seq->path.l]=0;	\
+	return seq->path.l;	\
+	}*/\
+				\
+        if(c == 'S' || c == 'P') /*if (c == 'S')*/seq->last_char = c; /* the first header char has been read */    \
         seq->seq.s[seq->seq.l] = 0;    /* null terminated string */        \
-	std::cout<<"return before"<<std::endl;\
-	return seq->seq.l;	\
-        if (c != '+') return seq->seq.l; /* FASTA */                    \
+        if (c != 'P'){  /*std::cout<<seq->seq.s<<std::endl;*//* FASTA */                    \
+	/*std::cout<<"new c: "<<c<<std::endl;*/		\
+	return seq->seq.l; }\
         if (seq->qual.m < seq->seq.m) {    /* allocate enough memory */    \
             seq->qual.m = seq->seq.m;                                    \
             seq->qual.s = (char*)realloc(seq->qual.s, seq->qual.m);        \
         }                                                                \
+	/*std::cout<<char(c)<<std::endl;*/	\
         while ((c = ks_getc(ks)) != -1 && c != '\n'); /* skip the rest of '+' line */ \
         if (c == -1) return -2; /* we should not stop here */            \
         while ((c = ks_getc(ks)) != -1 && seq->qual.l < seq->seq.l)        \
@@ -208,12 +244,14 @@ typedef struct __kstring_t {
         seq->qual.s[seq->qual.l] = 0; /* null terminated string */        \
         seq->last_char = 0;    /* we have not come to the next header line */ \
         if (seq->seq.l != seq->qual.l) return -2; /* qual string is shorter than seq string */ \
+	/*std::cout<<seq->seq.s<<std::endl;*/\
         return seq->seq.l;                                                \
     }
 
 #define __KSEQ_TYPE(type_t)                        \
     typedef struct {                            \
-        kstring_t name, comment, seq, qual;        \
+	bool readType=false; /*to identify path or Seq	*/\
+        kstring_t name, comment, seq, qual,path;        \
         int last_char;                            \
         kstream_t *f;                            \
     } kseq_t;

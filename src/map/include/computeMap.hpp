@@ -133,7 +133,7 @@ namespace skch
 	std::cout<<"return vale: "<<kseq_read(seq)<<std::endl;
           while ((len = kseq_read(seq)) >= 0) 
           {
-	std::cout<<"in computemap "<<seq->readType<<std::endl;
+	/*std::cout<<"in computemap "<<seq->readType<<std::endl;*/
             if (param.filterMode == filter::ONETOONE)
               qmetadata.push_back( ContigInfo{seq->name.s, (offset_t) seq->seq.l} );
 
