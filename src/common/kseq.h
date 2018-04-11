@@ -162,11 +162,36 @@ typedef struct __kstring_t {
         free(ks);                                                        \
     }
 
-/* Return value:
-   >=0  length of the sequence (normal)
-   -1   end-of-file
-   -2   truncated quality string
- */
+#define __READPATH 								\
+static void readPath(File* fp) 								\
+{ 											\
+	std::string line;								\
+	while(getline(file, line)) 							\
+	{										\
+		if(line[0] == 'P') 							\
+		{									\
+			std::string path;						\
+			std::size_t found = line.find_last_of("\t");			\
+			path = line.substr(found + 1);					\
+			size_t pos = 0, newPos = 0;					\
+			std::string delimiter = ",";					\
+			std::string token;						\
+			Position position = {};						\
+			while((newPos = path.find(delimiter, pos)) != std::string::npos) \
+			{								\
+				token = path.substr(pos, newPos - pos);			\
+				pos = newPos + 1;					\
+				std::string ori = path.substr(token.length() - 1);	\
+				if(ori.compare("+") == 0)				\
+					position.orientation = true;			\
+				else							\
+					position.orientation = false;			\
+				position.transcriptId(stoi(token.substr(0, token.length() - 1)));\
+				position.length = 0;					\
+			}								\
+		}									\
+	}										\
+}											\
 #define __KSEQ_READ                                                        \
     static int kseq_read(kseq_t *seq)                                    \
     {                                                                    \

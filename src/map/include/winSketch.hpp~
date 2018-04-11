@@ -188,8 +188,8 @@ namespace skch
           sequencesByFileInfo.push_back(seqCounter);
 
           kseq_destroy(seq);  
-	std::map<std::string,int>::iterator iter;
-	
+	  kseq_t *seq_new = kseq_init(fp);
+	  
           gzclose(fp); //close the file handler 
           fclose(file);
         }

@@ -112,6 +112,8 @@ namespace skch
             this->computeFreqHist();
           }
 
+	
+
       private:
 
       /**
@@ -189,7 +191,7 @@ namespace skch
 
           kseq_destroy(seq);  
 	  kseq_t *seq_new = kseq_init(fp);
-	  
+	  readPath(file);
           gzclose(fp); //close the file handler 
           fclose(file);
         }
