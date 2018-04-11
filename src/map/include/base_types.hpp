@@ -9,10 +9,11 @@
 
 #include <tuple>
 #include <vector>
+#include <map>
 #include "../../sparsepp/spp.h"
 
 spp::sparse_hash_map<std::string, std::string>pathInfo;
-
+std::map<std::string, int> contigIdmap;
 namespace skch
 {
   typedef uint32_t hash_t;    //hash type

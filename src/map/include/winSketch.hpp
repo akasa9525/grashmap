@@ -146,10 +146,11 @@ namespace skch
 	std::cout<<"winsketch: "<<kseq_read(seq)<<std::endl;
           while ((len = kseq_read(seq)) >= 0) 
           {
-	if(seq->readType==true){
+	/*if(seq->readType==true){*/
             //Save the sequence name
             metadata.push_back( ContigInfo{seq->name.s, (offset_t)seq->seq.l} );
 		std::cout<<"in if winsketch "<<seq->name.s<<" "<<seq->seq.s<<std::endl;
+		contigIdmap.insert(std::make_pair(seq->name.s,seqCounter));
             //Is the sequence too short?
             if(len < param.windowSize || len < param.kmerSize)
             {
@@ -169,17 +170,22 @@ namespace skch
             }
 
             seqCounter++;
-		}
-	else{
+		
+		
+	/*else{
 		std::cout<<"in else winsketch "<<seq->name.s<<" "<<seq->path.s<<std::endl;
 		pathInfo.insert(std::make_pair(seq->name.s,seq->path.s));
 		seqCounter++;		
-	}
+	}*/
           }
 
           sequencesByFileInfo.push_back(seqCounter);
 
           kseq_destroy(seq);  
+	std::map<std::string,int>::iterator iter;
+	for(iter=contigIdmap.begin();iter!=contigIdmap.end();iter++){
+		std::cout<<"map key value: "<<iter->first<<" "<<iter->second<<std::endl;
+	}
           gzclose(fp); //close the file handler 
           fclose(file);
         }

@@ -177,7 +177,7 @@ typedef struct __kstring_t {
         int c;                                                            \
         kstream_t *ks = seq->f;                                            \
         /*if (seq->last_char == 0) {*/ /* then jump to the next header line */ \
-            /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P')*/ while ((c = ks_getc(ks)) != -1 && c != 'S' && c!='P');   \
+            /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != 'P')*/ while ((c = ks_getc(ks)) != -1 && c != 'S');   \
             if (c == -1) return -1; /* end of file */                    \
             seq->last_char = c;                                            \
 	/*std::cout<<(char)c<<std::endl;*/		\
@@ -204,14 +204,14 @@ typedef struct __kstring_t {
 	/*std::cout<<"Seq: "<<seq->seq.s<<" "<<seq->seq.l<<std::endl;*/	\
 	return seq->seq.l;\
 	}	\
-	if(seq->last_char=='P'){\
+	/*if(seq->last_char=='P'){\
 	seq->readType=false;\
-        /*while ((c = ks_getc(ks)) != -1 && c != 'S' && c != '+' && c != 'P')*/while ((c = ks_getc(ks)) != -1 && (c != 'S' && c != 'P')) { \
-            if (isgraph(c)) { /* printable non-space character */        \
+        while ((c = ks_getc(ks)) != -1 && (c != 'S' && c != 'P')) { \
+            if (isgraph(c)) {        \
 			\
-                if (seq->path.l + 1 >= seq->path.m) { /* double the memory */ \
+                if (seq->path.l + 1 >= seq->path.m) { \
                     seq->path.m = seq->path.l + 2;                        \
-                    kroundup32(seq->path.m); /* rounded to next closest 2^k */ \
+                    kroundup32(seq->path.m); \
                     seq->path.s = (char*)realloc(seq->path.s, seq->path.m); \
                 }                                                        \
 			\
@@ -219,9 +219,8 @@ typedef struct __kstring_t {
             }                                                            \
         }                                                                \
 	seq->path.s[seq->path.l]=0;	\
-	/*std::cout<<"Path: "<<seq->path.s<<" "<<seq->path.l<<std::endl;*/	\
 	return seq->path.l;	\
-	}\
+	}*/\
 				\
         if(c == 'S' || c == 'P') /*if (c == 'S')*/seq->last_char = c; /* the first header char has been read */    \
         seq->seq.s[seq->seq.l] = 0;    /* null terminated string */        \
@@ -246,7 +245,7 @@ typedef struct __kstring_t {
 
 #define __KSEQ_TYPE(type_t)                        \
     typedef struct {                            \
-	bool readType; /*to identify path or Seq	*/\
+	bool readType=false; /*to identify path or Seq	*/\
         kstring_t name, comment, seq, qual,path;        \
         int last_char;                            \
         kstream_t *f;                            \
