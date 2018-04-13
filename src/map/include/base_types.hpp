@@ -12,12 +12,13 @@
 #include <map>
 #include "../../sparsepp/spp.h"
 
-struct Position {
+typedef struct {
 	int length;
 	bool orientation;
 	std::string transcriptId;
-};
-std::vector<Position> Contig2Transcript;
+}Position;
+//std::vector< std::vector<Position> > Contig2Transcript;
+//std::vector<Position>
 std::map<std::string, int> contigIdmap;
 namespace skch
 {

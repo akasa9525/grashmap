@@ -162,7 +162,7 @@ typedef struct __kstring_t {
         free(ks);                                                        \
     }
 
-#define __READPATH(File* fp) 								\
+#define __READPATH 								\
 static void readPath(File* fp) 								\
 { 											\
 	std::string line;								\

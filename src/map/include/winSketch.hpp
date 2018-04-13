@@ -113,7 +113,78 @@ namespace skch
           }
 
 	
-
+public:
+void readPath(std::string name, std::vector<Position> Contig2Transcript[]) 								
+{ 											
+	std::string line;
+	ifstream file;
+	file.open(name);								
+	while(getline(file, line)) 							
+	{										
+		if(line[0] == 'P') 							
+		{							
+			std::string path;						
+			std::size_t found = line.find_last_of("\t");
+			std::size_t first = line.find("\t");
+			std::string tId = line.substr(first, found - first);
+			//cout<<"tid "<<tId<<std::endl;
+			path = line.substr(found + 1);
+			//std::cout<<"paths :"<<path<<std::endl;
+			size_t pos = 0, newPos = 0;					
+			std::string delimiter = ",";					
+			std::string token;						
+			int index;					
+			std::string ori;
+			std::string contigid;
+			Position position;
+			while((newPos = path.find(delimiter, pos)) != std::string::npos) 
+			{								
+				position = {};
+				position.transcriptId = tId;
+				token = path.substr(pos, newPos - pos);
+				pos = newPos + 1;					
+				ori = token.substr(token.length() - 1);
+				contigid = (token.substr(0, token.length() - 1));
+				index = contigIdmap[contigid];
+				//std::cout<<"index "<<index<<std::endl;
+				//std::cout<<"Ori : "<< " "<<ori<<std::endl;
+				if(ori.compare("+") == 0)
+				{				
+					position.orientation = true;			
+					//std::cout<<"ori true"<<std::endl;				
+				}				
+				else							
+					position.orientation = false;			
+				
+				//std::cout<<"contigs "<<position.transcriptId<<std::endl;
+				position.length = 0;
+				//std::cout<<"inserting "<<position.transcriptId<<"  "<<position.orientation<<std::endl;
+				Contig2Transcript[index].push_back(position);
+				//Contig2Transcript.push_back(position);					
+			}
+			position = {};
+			token = path.substr(pos, newPos - pos);
+			
+			ori = token.substr(token.length() - 1);
+			contigid = (token.substr(0, token.length() - 1));
+			index = contigIdmap[contigid];
+				//std::cout<<"index "<<index<<std::endl;
+			if(ori.compare("+") == 0)				
+				position.orientation = true;			
+			else							
+				position.orientation = false;			
+				
+			//cout<<"contigs "<<position.transcriptId<<std::endl;
+			position.length = 0;
+			Contig2Transcript[index].push_back(position);
+			//std::cout<<"index "<<index<<std::endl;						
+		}									
+	}
+	int dummy = contigIdmap["164"];
+	for(std::vector<Position>::iterator h =Contig2Transcript[dummy].begin(); h!= Contig2Transcript[dummy].end(); h++){
+	//std::cout<<"dil se "<<(*h).transcriptId<<" "<<(*h).orientation<<std::endl;
+}										
+}			
       private:
 
       /**
@@ -153,11 +224,11 @@ namespace skch
 		char *del1 = strstr(seq->seq.s, "+");
 		char *del2 = strstr(seq->seq.s, "-");
 		if(del!=NULL || del1!=NULL || del2!=NULL) {
-		std::cout<<"found P "<<seq->seq.s<<std::endl;		
+		//std::cout<<"found P "<<seq->seq.s<<std::endl;		
 		continue;}
             //Save the sequence name
             metadata.push_back( ContigInfo{seq->name.s, (offset_t)seq->seq.l} );
-		std::cout<<"in if winsketch "<<seq->name.s<<" "<<seqCounter<<" "<<seq->seq.s<<std::endl;
+		//std::cout<<"in if winsketch "<<seq->name.s<<" "<<seqCounter<<" "<<seq->seq.s<<std::endl;
 		contigIdmap.insert(std::make_pair(seq->name.s,seqCounter));
             //Is the sequence too short?
             if(len < param.windowSize || len < param.kmerSize)
@@ -191,7 +262,21 @@ namespace skch
 
           kseq_destroy(seq);  
 	  kseq_t *seq_new = kseq_init(fp);
-	  readPath(file);
+	std::vector<Position> Contig2Transcript[seqCounter];
+	  /*Contig2Transcript.reserve(15);
+	Position pos1 = {};
+	pos1.transcriptId = "12312";
+	pos1.orientation = false;
+	pos1.length = 0;
+	Contig2Transcript[10].push_back(pos1);*/	  
+	readPath(fileName.c_str(),Contig2Transcript);
+	  vector<Position>::iterator iter1;
+	  //cout<<"size of vector"<< Contig2Transcript.size()<<std::endl;
+          for(int i =0; i < seqCounter; i++) {
+		for(std::vector<Position>::iterator it=Contig2Transcript[i].begin(); it!=Contig2Transcript[i].end();it++){
+		//std::cout<<"inserted"<< " at : " <<i<<" "<<(*it).transcriptId<<" " <<(*it).orientation << " "<<std::endl;
+		}	
+	  }
           gzclose(fp); //close the file handler 
           fclose(file);
         }
@@ -200,7 +285,7 @@ namespace skch
         while ( threadPool.running() )
           this->buildHandleThreadOutput(threadPool.popOutputWhenAvailable());
 
-        std::cout << "INFO, skch::Sketch::build, minimizers picked from reference = " << minimizerIndex.size() << std::endl;
+        //std::cout << "INFO, skch::Sketch::build, minimizers picked from reference = " << minimizerIndex.size() << std::endl;
 
       }
 
