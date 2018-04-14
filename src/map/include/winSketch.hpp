@@ -19,7 +19,7 @@
 #include "map/include/map_parameters.hpp"
 #include "map/include/commonFunc.hpp"
 #include "map/include/ThreadPool.hpp"
-
+#include "map/include/experiment.hpp"
 //External includes
 #include "common/kseq.h"
 #include "common/murmur3.h"
@@ -183,8 +183,9 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 	int dummy = contigIdmap["164"];
 	for(std::vector<Position>::iterator h =Contig2Transcript[dummy].begin(); h!= Contig2Transcript[dummy].end(); h++){
 	//std::cout<<"dil se "<<(*h).transcriptId<<" "<<(*h).orientation<<std::endl;
-}										
-}			
+	}											
+}
+		
       private:
 
       /**
@@ -277,6 +278,8 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 		//std::cout<<"inserted"<< " at : " <<i<<" "<<(*it).transcriptId<<" " <<(*it).orientation << " "<<std::endl;
 		}	
 	  }
+
+	  experiment(fileName.c_str(), Contig2Transcript);
           gzclose(fp); //close the file handler 
           fclose(file);
         }

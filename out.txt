@@ -1,0 +1,2 @@
+g++ -O3 -DNDEBUG -std=c++11 -Wno-deprecated-declarations -Isrc -I /home/aditya/gsl/include -include src/common/memcpyLink.h -Wl,--wrap=memcpy  src/map/mash_map.cpp -o mashmap /home/aditya/gsl/lib/libgsl.a /home/aditya/gsl/lib/libgslcblas.a -lstdc++ -lz -lm -lpthread 
+g++ -O3 -DNDEBUG -std=c++11 -Wno-deprecated-declarations -Isrc -I /home/aditya/gsl/include -include src/common/memcpyLink.h -Wl,--wrap=memcpy  src/map/mash_map.cpp -o mashmap /home/aditya/gsl/lib/libgsl.a /home/aditya/gsl/lib/libgslcblas.a -lstdc++ -lz -lm -lpthread 
