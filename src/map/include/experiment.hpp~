@@ -12,7 +12,9 @@ void experiment(std::string filename, std::vector<Position> Contig2Transcript[])
 	std::string line;
 	ifstream myfile;
 	//string inputFileName = "D:\\spring 18\\523\\small.bacterial.genome.fixed_31_fixed_pufferized.gfa";
-	//string outputFileName = "D:\\spring 18\\523\\output.txt";
+	string outputFileName = "output.txt";
+	ofstream outputFile;
+	outputFile.open(outputFileName);
 	myfile.open(filename);
 	unordered_map <int, int> contigInfo;
 	//map<int, string> pathInfo;
@@ -202,6 +204,11 @@ void experiment(std::string filename, std::vector<Position> Contig2Transcript[])
 		
 	}
 	myfile.close();
+	for(int n : output) {
+		std::cout << n << "\n";
+		outputFile << n;
+	}
+	outputFile.close();
 	//cout << output.size() << '\n';
 	/*cout << "output is being written to the file" << "\n";
 	map <std::vector<int>, int> ::iterator it2;
