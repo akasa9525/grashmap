@@ -1,4 +1,4 @@
-CXXFLAGS += -O3 -DNDEBUG -std=c++11 -Wno-deprecated-declarations -Isrc -I /home/aditya/gsl/include
+CXXFLAGS += -O3 -DNDEBUG -std=c++11 -Wno-deprecated-declarations -Isrc -I /usr/local//include
 CPPFLAGS += 
 
 UNAME_S=$(shell uname -s)
@@ -16,14 +16,14 @@ SOURCE_2=src/align/align.cpp
 all : mashmap 
 
 mashmap : 
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_1) -o mashmap /home/aditya/gsl/lib/libgsl.a /home/aditya/gsl/lib/libgslcblas.a -lstdc++ -lz -lm -lpthread 
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_1) -o mashmap -L/usr/local//lib -lgsl -lgslcblas -lstdc++ -lz -lm -lpthread 
 
 mashmap-align : 
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_2) -o mashmap-align /home/aditya/gsl/lib/libgsl.a /home/aditya/gsl/lib/libgslcblas.a -lstdc++ -lz -lm -lpthread 
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_2) -o mashmap-align -L/usr/local//lib -lgsl -lgslcblas -lstdc++ -lz -lm -lpthread 
 
 install : mashmap
-	mkdir -p /home/aditya/Downloads/MashMap-master/bin/
-	cp `pwd`/mashmap /home/aditya/Downloads/MashMap-master/bin/
+	mkdir -p /usr/local/bin/
+	cp `pwd`/mashmap /usr/local/bin/
 
 clean :
 	-rm -f mashmap

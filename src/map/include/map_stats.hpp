@@ -228,6 +228,7 @@ namespace skch
         float identity,
         int segmentLength, uint64_t lengthReference)
     {
+	return 31;
       int lengthQuery = segmentLength;
 
       //Push all the sketch values that we should try out in a vector

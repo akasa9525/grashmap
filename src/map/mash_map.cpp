@@ -48,13 +48,13 @@ int main(int argc, char** argv)
   std::cout << "INFO, skch::main, Time spent computing the reference index: " << timeRefSketch.count() << " sec" << std::endl;
 
   //Map the sequences in query file
-  t0 = skch::Time::now();
+  //t0 = skch::Time::now();
 
-  skch::Map mapper = skch::Map(parameters, referSketch);
+ // skch::Map mapper = skch::Map(parameters, referSketch);
 
-  std::chrono::duration<double> timeMapQuery = skch::Time::now() - t0;
-  std::cout << "INFO, skch::main, Time spent mapping the query : " << timeMapQuery.count() << " sec" << std::endl;
+ // std::chrono::duration<double> timeMapQuery = skch::Time::now() - t0;
+ // std::cout << "INFO, skch::main, Time spent mapping the query : " << timeMapQuery.count() << " sec" << std::endl;
 
-  std::cout << "INFO, skch::main, mapping results saved in : " << parameters.outFileName << std::endl;
+ // std::cout << "INFO, skch::main, mapping results saved in : " << parameters.outFileName << std::endl;
 
 }

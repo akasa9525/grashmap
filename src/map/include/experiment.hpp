@@ -19,7 +19,7 @@ void experiment(std::string filename, std::vector<Position> Contig2Transcript[])
 	unordered_map <int, int> contigInfo;
 	//map<int, string> pathInfo;
 	std::vector<int> output;
-	int n = 100;
+	int n = 1000;
 	while (getline(myfile, line))
 	{
 		if (line[0] == 'S') {
