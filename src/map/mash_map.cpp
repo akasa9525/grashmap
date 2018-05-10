@@ -36,12 +36,13 @@ int main(int argc, char** argv)
 
   //Parse command line arguements   
   skch::Parameters parameters;        //sketching and mapping parameters
-
+	std::cout<<"before parseandsave"<<endl;
   skch::parseandSave(argc, argv, cmd, parameters);   
 
   auto t0 = skch::Time::now();
 
   //Build the sketch for reference
+	std::cout<<"Build the sketch for reference"<<endl;
   skch::Sketch referSketch(parameters);
 
   std::chrono::duration<double> timeRefSketch = skch::Time::now() - t0;

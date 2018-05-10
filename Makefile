@@ -16,7 +16,7 @@ SOURCE_2=src/align/align.cpp
 all : mashmap 
 
 mashmap : 
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_1) -o mashmap -L/usr/local//lib -lgsl -lgslcblas -lstdc++ -lz -lm -lpthread 
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_1) -g -o mashmap -L/usr/local//lib -lgsl -lgslcblas -lstdc++ -lz -lm -lpthread 
 
 mashmap-align : 
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(SOURCE_2) -o mashmap-align -L/usr/local//lib -lgsl -lgslcblas -lstdc++ -lz -lm -lpthread 

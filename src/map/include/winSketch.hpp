@@ -115,7 +115,8 @@ namespace skch
 	
 public:
 void readPath(std::string name, std::vector<Position> Contig2Transcript[]) 								
-{ 											
+{ 	
+	std::cout<<"in read path"<<endl;										
 	std::string line;
 	ifstream file;
 	file.open(name);								
@@ -197,17 +198,18 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
       {
         //sequence counter while parsing file
         seqno_t seqCounter = 0;
-
+	std::cout<<"before threadpool"<<endl;
         //Create the thread pool 
         ThreadPool<InputSeqContainer, MI_Type> threadPool( [this](InputSeqContainer* e) {return buildHelper(e);}, param.threads);
-	//std::cout<<"### param "<<param.refSequences.size()<<std::endl;
+	std::cout<<"### param "<<param.refSequences.size()<<std::endl;
+	std::cout<<"after threadpool"<<endl;
         for(const auto &fileName : param.refSequences)
         {
 
 #ifdef DEBUG
         std::cout << "INFO, skch::Sketch::build, building minimizer index for " << fileName << std::endl;
 #endif
-
+	//std::cout<<fileName.c_str()<<endl;
           //Open the file using kseq
           FILE *file = fopen(fileName.c_str(), "r");
 	//std::cout<<"##### The file using kseq "<<fileName.c_str()<<std::endl;
@@ -217,7 +219,7 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 
           //size of sequence
           offset_t len;
-	/*std::cout<<"winsketch: "<<kseq_read(seq)<<std::endl;*/
+	//std::cout<<"winsketch: "<<kseq_read(seq)<<std::endl;
           while ((len = kseq_read(seq)) >= 0) 
           {
 	/*if(seq->readType==true){*/
@@ -258,12 +260,16 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 		seqCounter++;		
 	}*/
           }
-
+	std::cout<<"after while"<<endl;
           sequencesByFileInfo.push_back(seqCounter);
 
           kseq_destroy(seq);  
 	  kseq_t *seq_new = kseq_init(fp);
-	std::vector<Position> Contig2Transcript[seqCounter];
+	//Position P;
+	//std::vector<Position> Contig2Transcript[seqCounter];
+	std::cout<<contigIdmap.size()<<endl;
+	std::vector<Position> *Contig2Transcript = (std::vector<Position> *)malloc((contigIdmap.size())*sizeof(std::vector<Position>));
+	//std::vector<Position> Contig2Transcript[contigIdmap.size()];
 	  /*Contig2Transcript.reserve(15);
 	Position pos1 = {};
 	pos1.transcriptId = "12312";
@@ -273,11 +279,11 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 	readPath(fileName.c_str(),Contig2Transcript);
 	  vector<Position>::iterator iter1;
 	  //cout<<"size of vector"<< Contig2Transcript.size()<<std::endl;
-          for(int i =0; i < seqCounter; i++) {
+          /*for(int i =0; i < seqCounter; i++) {
 		for(std::vector<Position>::iterator it=Contig2Transcript[i].begin(); it!=Contig2Transcript[i].end();it++){
 		//std::cout<<"inserted"<< " at : " <<i<<" "<<(*it).transcriptId<<" " <<(*it).orientation << " "<<std::endl;
 		}	
-	  }
+	  }*/
 
 	  experiment(fileName.c_str(), Contig2Transcript);
           gzclose(fp); //close the file handler 

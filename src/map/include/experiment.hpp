@@ -9,6 +9,7 @@ std::vector<std::string> getTranscript(std::vector<Position> c ){
 }
 
 void experiment(std::string filename, std::vector<Position> Contig2Transcript[]) {
+	std::cout<<"in experiment"<<endl;
 	std::string line;
 	ifstream myfile;
 	//string inputFileName = "D:\\spring 18\\523\\small.bacterial.genome.fixed_31_fixed_pufferized.gfa";
