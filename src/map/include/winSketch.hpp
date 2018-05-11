@@ -120,7 +120,27 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 	std::string line;
 	ifstream file;
 	file.open(name);
-									
+	unordered_map <int, int> contigInfo;
+	while (getline(file, line))
+	{
+		if (line[0] == 'S') {
+			int wordNum = 0;
+			int contigId;
+			string contig;
+			std::string delimiter = "\t";
+			size_t firstPos = line.find(delimiter);
+			size_t lastPos = line.find_last_of(delimiter);
+			contigId = stoi(line.substr(firstPos + 1, lastPos));
+			//contig = line.substr(lastPos + 1);
+			contig = line.substr(lastPos);
+			//cout << "contigid and its length inserted in map " << contigId << "   " << contig.length() << "\n";
+			contigInfo.insert(pair <int, int>(contigId, contig.length()));
+		}
+	}
+	
+	file.close();
+	file.clear();	
+	file.open(name);						
 	while(getline(file, line)) 							
 	{										
 		if(line[0] == 'P') 							
@@ -139,6 +159,7 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 			std::string ori;
 			std::string contigid;
 			Position position;
+			int acumpos=0;
 			while((newPos = path.find(delimiter, pos)) != std::string::npos) 
 			{								
 				position = {};
@@ -159,7 +180,8 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 					position.orientation = false;			
 				
 				//std::cout<<"contigs "<<position.transcriptId<<std::endl;
-				position.length = 0;
+				position.length = acumpos;
+				acumpos = acumpos+contigInfo[std::stoi(contigid)];
 				//std::cout<<"inserting "<<position.transcriptId<<"  "<<position.orientation<<std::endl;
 				Contig2Transcript[index].push_back(position);
 				//Contig2Transcript.push_back(position);					

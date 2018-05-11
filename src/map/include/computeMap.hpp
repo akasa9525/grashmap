@@ -103,6 +103,8 @@ namespace skch
       /**
        * @brief   parse over sequences in query file and map each on the reference
        */
+
+	
       void mapQuery()
       {
         //Count of reads mapped by us
@@ -113,7 +115,7 @@ namespace skch
 
         std::ofstream outstrm(param.outFileName);
         MappingResultsVector_t allReadMappings;  //Aggregate mapping results for the complete run
-
+	MappingResultsVector_t qallReadMappings;
         //Create the thread pool 
         ThreadPool<InputSeqContainer, MapModuleOutput> threadPool( [this](InputSeqContainer* e){return mapModule(e);}, param.threads);
 
@@ -171,7 +173,36 @@ namespace skch
         //Collect remaining output objects
         while ( threadPool.running() )
           mapModuleHandleOutput(threadPool.popOutputWhenAvailable(), allReadMappings, totalReadsMapped, outstrm);
+	for(int i=0;i<allReadMappings.size();i++){
+		int x = contigIdmap[allReadMappings[i].refSeqId];
+		for(int j=0;j<Contig2Transcript[x].size();j++){
+		MappinResult map;
+		map.queryLen = allReadMappings[i].queryLen;
+		map.refStartPos = queryLen + Contig2Transcript[x][j].length ;
+		map.refEndPos = allReadMappings[i].refEndPos;
+		map.queryStartPos = allReadMappings[i].queryStartPos;
+		map.queryEndPos = allReadMappings[i].queryEndPos;
+		map.refSeqId = 	Contig2Transcript[x][j].transcriptId;
+		map.querySeqId = allReadMappings[i].querySeqId;
+		map.nucIdentity = allReadMappings[i].nucIndetity;
+		map.nucIndentityUpperBound = allReadMappings[i].nucIdentityUpperBound;
+		map.sketchSize = allReadMappings[i].sketchSize;
+		map.conservedSketches= allReadMappings[i].conservdSketches;
+		if(Contig2Transcript[x][j].orientation == true)
+		map.strand = 1;
+		else
+		map.strand = 0;
 
+		map.splitMappningId = allReadMappings[i].splitMappingId;
+
+//		map.refSeqId = allReadMappings[i].refSeqId;
+//		map.querySeqId = allReadMappings[i].;
+//		map.queryLen = allReadMappings[i].queryLen;
+
+qallReadMappings.push_back(map);
+		}
+
+	}
         //Filter over reference axis and report the mappings
         if (param.filterMode == filter::ONETOONE)
         {
