@@ -80,28 +80,29 @@ void experiment(std::string filename, std::vector<Position> Contig2Transcript[])
 				flag = 0;
 				if (remaining <= 0) {
 					std::vector<std::string> first=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[0])]]);
-					std::cout<<"FIRST: "<<std::endl;
+					/*std::cout<<"FIRST: "<<std::endl;
 					for(int i=0;i<first.size();i++){
 					std::cout<<first[i]<<" ";
 					}
-					std::cout<<" "<<std::endl;
+					std::cout<<" "<<std::endl;*/
 						for(int u=1; u<validContigs.size(); u++){
 							int index = contigIdmap[std::to_string(validContigs[u])];
 							
-							std::vector<std::string> second=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[index])]]);				
-							std::cout<<"SECOND: "<<std::endl;
+							//std::vector<std::string> second=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[index])]]);		
+std::vector<std::string> second=getTranscript(Contig2Transcript[index]);		
+							/*std::cout<<"SECOND: "<<std::endl;
 							for(int i=0;i<second.size();i++){
 							std::cout<<second[i]<<" ";
 							}
-						std::cout<<" "<<std::endl;
+						std::cout<<" "<<std::endl;*/
 							std::sort(first.begin(), first.end());
 							std::sort(second.begin(), second.end());
 							std::set_intersection(first.begin(),first.end(),second.begin(),second.end(),back_inserter(first));			
-						std::cout<<"Intersection is: "<<std::endl;	
+						/*std::cout<<"Intersection is: "<<std::endl;	
 						for(int i=0;i<first.size();i++){
 							std::cout<<first[i]<<" ";
 							}
-						std::cout<<" "<<std::endl;						
+						std::cout<<" "<<std::endl;	*/					
 						// Take intersection of first and second
 						//and save it in the variable first 													
 						}
@@ -126,33 +127,36 @@ void experiment(std::string filename, std::vector<Position> Contig2Transcript[])
 				}
 				for (unsigned k = i + 1; k < paths.size(); k++) {
 					remaining = remaining - contigInfo.find(paths[k])->second;
+										
 					validContigs.push_back(paths[k]);
 					//vector<Positions> first = Contig2Transcript[contigIdMap[validContigs[0]]];
 					
 					if (remaining <= 0) {
 						std::vector<std::string> first=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[0])]]);
-					std::cout<<"FIRST: "<<std::endl;
+					/*std::cout<<"FIRST: "<<std::endl;
 					for(int i=0;i<first.size();i++){
 					std::cout<<first[i]<<" ";
 					}
-					std::cout<<" "<<std::endl;
+					std::cout<<" "<<std::endl;*/
 						for(int u=1; u<validContigs.size(); u++){
 							int index = contigIdmap[std::to_string(validContigs[u])];
-							
-							std::vector<std::string> second=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[index])]]);				
-							std::cout<<"SECOND: "<<std::endl;
+							std::cout<<"index: "<<index<<std::endl;
+							std::cout<<"valid contig: "<<validContigs[index]<<std::endl;
+							//std::vector<std::string> second=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[index])]]);		
+						std::vector<std::string> second=getTranscript(Contig2Transcript[index]);		
+							/*std::cout<<"SECOND: "<<std::endl;
 							for(int i=0;i<second.size();i++){
 							std::cout<<second[i]<<" ";
 							}
-						std::cout<<" "<<std::endl;
+						std::cout<<" "<<std::endl;*/
 							std::sort(first.begin(), first.end());
 							std::sort(second.begin(), second.end());
 							std::set_intersection(first.begin(),first.end(),second.begin(),second.end(),back_inserter(first));			
-						std::cout<<"Intersection is: "<<std::endl;	
-						for(int i=0;i<first.size();i++){
+						//std::cout<<"Intersection is: "<<std::endl;	
+						/*for(int i=0;i<first.size();i++){
 							std::cout<<first[i]<<" ";
 							}
-						std::cout<<" "<<std::endl;						
+						std::cout<<" "<<std::endl;	*/					
 						// Take intersection of first and second
 						//and save it in the variable first 													
 						}
@@ -204,6 +208,7 @@ void experiment(std::string filename, std::vector<Position> Contig2Transcript[])
 		}
 		
 	}
+	std::cout<<"outside for"<<endl;
 	myfile.close();
 	for(int n : output) {
 		std::cout << n << "\n";

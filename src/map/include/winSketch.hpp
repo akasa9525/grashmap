@@ -119,7 +119,8 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 	std::cout<<"in read path"<<endl;										
 	std::string line;
 	ifstream file;
-	file.open(name);								
+	file.open(name);
+									
 	while(getline(file, line)) 							
 	{										
 		if(line[0] == 'P') 							
