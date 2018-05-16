@@ -140,8 +140,8 @@ std::vector<std::string> second=getTranscript(Contig2Transcript[index]);
 					std::cout<<" "<<std::endl;*/
 						for(int u=1; u<validContigs.size(); u++){
 							int index = contigIdmap[std::to_string(validContigs[u])];
-							std::cout<<"index: "<<index<<std::endl;
-							std::cout<<"valid contig: "<<validContigs[index]<<std::endl;
+							//std::cout<<"index: "<<index<<std::endl;
+							//std::cout<<"valid contig: "<<validContigs[index]<<std::endl;
 							//std::vector<std::string> second=getTranscript(Contig2Transcript[contigIdmap[std::to_string(validContigs[index])]]);		
 						std::vector<std::string> second=getTranscript(Contig2Transcript[index]);		
 							/*std::cout<<"SECOND: "<<std::endl;
