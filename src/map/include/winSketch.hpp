@@ -27,7 +27,7 @@
 #include "common/sparsehash/dense_hash_map"
 //#include "sparsepp/spp.h"
 KSEQ_INIT(gzFile, gzread)
-
+std::vector<Position> *Contig2Transcript;
 namespace skch
 {
   /**
@@ -291,7 +291,7 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 	//Position P;
 	//std::vector<Position> Contig2Transcript[seqCounter];
 	std::cout<<contigIdmap.size()<<endl;
-	std::vector<Position> *Contig2Transcript = (std::vector<Position> *)malloc((contigIdmap.size())*sizeof(std::vector<Position>));
+	Contig2Transcript = (std::vector<Position> *)malloc((contigIdmap.size())*sizeof(std::vector<Position>));
 	//std::vector<Position> Contig2Transcript[contigIdmap.size()];
 	  /*Contig2Transcript.reserve(15);
 	Position pos1 = {};
@@ -308,7 +308,7 @@ void readPath(std::string name, std::vector<Position> Contig2Transcript[])
 		}	
 	  }*/
 
-	  experiment(fileName.c_str(), Contig2Transcript);
+	  //experiment(fileName.c_str(), Contig2Transcript);
           gzclose(fp); //close the file handler 
           fclose(file);
         }

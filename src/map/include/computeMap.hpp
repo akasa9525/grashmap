@@ -174,26 +174,26 @@ namespace skch
         while ( threadPool.running() )
           mapModuleHandleOutput(threadPool.popOutputWhenAvailable(), allReadMappings, totalReadsMapped, outstrm);
 	for(int i=0;i<allReadMappings.size();i++){
-		int x = contigIdmap[allReadMappings[i].refSeqId];
+		int x = contigIdmap[to_string(allReadMappings[i].refSeqId)];
 		for(int j=0;j<Contig2Transcript[x].size();j++){
-		MappinResult map;
+		MappingResult map;
 		map.queryLen = allReadMappings[i].queryLen;
-		map.refStartPos = queryLen + Contig2Transcript[x][j].length ;
+		map.refStartPos = map.queryLen + Contig2Transcript[x][j].length ;
 		map.refEndPos = allReadMappings[i].refEndPos;
 		map.queryStartPos = allReadMappings[i].queryStartPos;
 		map.queryEndPos = allReadMappings[i].queryEndPos;
-		map.refSeqId = 	Contig2Transcript[x][j].transcriptId;
+		map.refSeqId = 	stoi(Contig2Transcript[x][j].transcriptId);
 		map.querySeqId = allReadMappings[i].querySeqId;
-		map.nucIdentity = allReadMappings[i].nucIndetity;
-		map.nucIndentityUpperBound = allReadMappings[i].nucIdentityUpperBound;
+		map.nucIdentity = allReadMappings[i].nucIdentity;
+		map.nucIdentityUpperBound = allReadMappings[i].nucIdentityUpperBound;
 		map.sketchSize = allReadMappings[i].sketchSize;
-		map.conservedSketches= allReadMappings[i].conservdSketches;
+		map.conservedSketches= allReadMappings[i].conservedSketches;
 		if(Contig2Transcript[x][j].orientation == true)
 		map.strand = 1;
 		else
 		map.strand = 0;
 
-		map.splitMappningId = allReadMappings[i].splitMappingId;
+		map.splitMappingId = allReadMappings[i].splitMappingId;
 
 //		map.refSeqId = allReadMappings[i].refSeqId;
 //		map.querySeqId = allReadMappings[i].;
@@ -206,16 +206,16 @@ qallReadMappings.push_back(map);
         //Filter over reference axis and report the mappings
         if (param.filterMode == filter::ONETOONE)
         {
-          skch::Filter::ref::filterMappings(allReadMappings, this->refSketch);
+          skch::Filter::ref::filterMappings(qallReadMappings, this->refSketch);
 
           //Re-sort mappings by input order of query sequences
           //This order may be needed for any post analysis of output
-          std::sort(allReadMappings.begin(), allReadMappings.end(), [](const MappingResult &a, const MappingResult &b)  
+          std::sort(qallReadMappings.begin(), qallReadMappings.end(), [](const MappingResult &a, const MappingResult &b)  
           {
             return (a.querySeqId < b.querySeqId);
           });
 
-          reportReadMappings(allReadMappings, "", outstrm);
+          reportReadMappings(qallReadMappings, "", outstrm);
         }
 
         std::cout << "INFO, skch::Map::mapQuery, [count of mapped reads, reads qualified for mapping, total input reads] = [" << totalReadsMapped << ", " << totalReadsPickedForMapping << ", " << seqCounter << "]" << std::endl;

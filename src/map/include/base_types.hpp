@@ -17,6 +17,8 @@ typedef struct {
 	bool orientation;
 	std::string transcriptId;
 }Position;
+//std::map<std::string, int> contigIdmap;
+//std::vector<Position> *Contig2Transcript= (std::vector<Position> *)malloc((contigIdmap.size())*sizeof(std::vector<Position>));
 //std::vector< std::vector<Position> > Contig2Transcript;
 //std::vector<Position>
 std::map<std::string, int> contigIdmap;
