@@ -1,0 +1,4 @@
+The query part is not matching the output of mashmap and we believe it is because of the following reason -
+1. We changed the code where mashmap calculates the window size and set it to 31 to meet our requirements. mapModuleHandleOutput()(in computeMap.hpp) is the function that handles calculatting the mapping and creating threads that do that. This function check the window size before creating the threads. We observed that the threads were not getting created and this may be the reason.
+
+2. We changed the allReadMappings data structure in computeMap.hpp to accomodate for filtering steps in filterMapping(). However, this is not invoked in mappin mode, it is invoked only in ONTOONE mode. Therefore, it is not behaving in the way we expected it to behave. 
